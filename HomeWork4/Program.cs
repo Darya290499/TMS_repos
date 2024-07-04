@@ -27,14 +27,15 @@ public class Program
             {
                 Console.WriteLine("Провести операцию с уже созданной матрицей? (да/нет)");
                 again = Console.ReadLine().ToLower() == "да";
+                matrix = GetMatrixCopy(matrixCopy, line_count, column_count);
             }
             if (!again)
             {
                 CheckInput(ref line_count, "строк");
                 CheckInput(ref column_count, "столбцов");
                 matrix = new int[line_count, column_count];
-                matrixCopy = matrix;
-                InputMatrix(ref matrix, line_count, column_count);
+                InputMatrix(matrix, line_count, column_count);
+                matrixCopy = GetMatrixCopy(matrix, line_count, column_count);
             }
             Console.WriteLine("\nИсходная матрица:");
             OutputMatrix(matrixCopy, line_count, column_count);
@@ -51,6 +52,8 @@ public class Program
         Console.WriteLine("4 - сортировка элементов матрицы по убыванию");
         Console.WriteLine("5 - инверсия элементов матрицы (построчно)");
         Console.WriteLine("0 - выход из приложения");
+
+        Console.WriteLine("\nВаш выбор:");
     }
 
     protected static int GetOperation()
@@ -94,11 +97,11 @@ public class Program
                 if (variable > 0) break;
                 else Console.WriteLine("Размер матрицы должен быть больше нуля");
             else
-                Console.WriteLine("Полученная строка не является числом. Повторите ввод");
+                Console.WriteLine("Полученная строка не является целым числом. Повторите ввод");
         }
     }
 
-    protected static void InputMatrix(ref int[,] matrix, int line_count, int column_count)
+    protected static void InputMatrix(int[,] matrix, int line_count, int column_count)
     {
         Console.WriteLine("Заполнить матрицу рандомными числами от -100 до 100?");
         if (Console.ReadLine().ToLower() == "да")
@@ -121,7 +124,7 @@ public class Program
                 {
                     if (Int32.TryParse(Console.ReadLine(), out matrix[i, j]))
                         break;
-                    Console.WriteLine("Полученная строка не является числом. Повторите ввод");
+                    Console.WriteLine("Полученная строка не является целым ычислом. Повторите ввод");
                 }
             }
         }
@@ -224,4 +227,12 @@ public class Program
         OutputMatrix(matrix, line_count, column_count);
     }
 
+    protected static int[,] GetMatrixCopy(int[,] matrix, int line_count, int column_count)
+    {
+        var matrixCopy = new int[line_count, column_count];
+        for (int i = 0; i < line_count; i++)
+            for (int j = 0; j < column_count; j++)
+                matrixCopy[i, j] = matrix[i, j];
+        return matrixCopy;
+    }
 }
